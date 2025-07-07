@@ -514,19 +514,32 @@
             updateSendBtnState();
             
             appendMessage('Думаю...', 'bot');
-            
-            // Python requests example for API usage (GET models)
-            /*
-            import requests
-
-            url = "https://api.langdock.com/assistant/v1/models"
-
-            headers = {"Authorization": "sk-09gCbknxK8tOwRN8mC-NcRpqtdZjnhls57LSiSJh8TwJvUWqL3DLxnI1gpf9TCM5YZarbnpZ_r9P9Vy2dJrjLg"}
-
-            response = requests.request("GET", url, headers=headers)
-
-            print(response.text)
-            */
+            try {
+                // Вернуть рабочий fetch-запрос к API
+                const response = await fetch(
+                    'https://api.langdock.com/anthropic/us/v1/messages',
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: 'sk-09gCbknxK8tOwRN8mC-NcRpqtdZjnhls57LSiSJh8TwJvUWqL3DLxnI1gpf9TCM5YZarbnpZ_r9P9Vy2dJrjLg',
+                            'HTTP-Referer': 'https://neurotoday.ru/',
+                            'X-Title': 'NeuroToday',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-7-sonnet-20250219',
+                            messages: [{ role: 'user', content: messageText }],
+                        }),
+                    }
+                );
+                const data = await response.json();
+                const botMsg = chatMessages.querySelector('.message.bot:last-child');
+                const markdownText = data.choices?.[0]?.message?.content || 'Ответ не найден.';
+                if(botMsg) botMsg.innerHTML = marked.parse(markdownText);
+            } catch (error) {
+                const botMsg = chatMessages.querySelector('.message.bot:last-child');
+                if(botMsg) botMsg.textContent = 'Ошибка: ' + error.message;
+            }
         }
         
         // --- Фон: вселенная со статичными звёздами ---
