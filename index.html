@@ -513,31 +513,36 @@
             selectedFiles = [];
             updateSendBtnState();
             
-            // Python requests example for OpenRouter API usage
-            /*
-            import requests
-            import json
-
-            response = requests.post(
-              url="https://openrouter.ai/api/v1/chat/completions",
-              headers={
-                "Authorization": "Bearer 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",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
-                "X-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
-              },
-              data=json.dumps({
-                "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1:free",
-                "messages": [
-                  {
-                    "role": "user",
-                    "content": "What is the meaning of life?"
-                  }
-                ],
+            appendMessage('Думаю...', 'bot');
+            
+            try {
+                // На самом деле мы не можем отправить файлы на сервер API в текущей реализации,
+                // но можем отправить информацию о них
+                const response = await fetch(
+                    'https://openrouter.ai/api/v1/chat/completions',
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: 'Bearer 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',
+                            'HTTP-Referer': 'https://neurotoday.ru/',
+                            'X-Title': 'NeuroToday',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: 'meta-llama/llama-3.3-70b-instruct:free',
+                            messages: [{ role: 'user', content: messageText }],
+                        }),
+                    }
+                );
                 
-              })
-            )
-            */
+                const data = await response.json();
+                const botMsg = chatMessages.querySelector('.message.bot:last-child');
+                const markdownText = data.choices?.[0]?.message?.content || 'Ответ не найден.';
+                if(botMsg) botMsg.innerHTML = marked.parse(markdownText);
+            } catch (error) {
+                const botMsg = chatMessages.querySelector('.message.bot:last-child');
+                if(botMsg) botMsg.textContent = 'Ошибка: ' + error.message;
+            }
         }
         
         // --- Фон: вселенная со статичными звёздами ---
