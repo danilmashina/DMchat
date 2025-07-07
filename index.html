@@ -515,19 +515,15 @@
             
             appendMessage('Думаю...', 'bot');
             
-            // Python requests example for API usage (замена fetch)
+            // Python requests example for API usage (GET models)
             /*
             import requests
 
-            url = "https://api.langdock.com/anthropic/us/v1/messages"
+            url = "https://api.langdock.com/assistant/v1/models"
 
-            payload = {"model": "claude-3-7-sonnet-20250219"}
-            headers = {
-                "Authorization": "sk-09gCbknxK8tOwRN8mC-NcRpqtdZjnhls57LSiSJh8TwJvUWqL3DLxnI1gpf9TCM5YZarbnpZ_r9P9Vy2dJrjLg",
-                "Content-Type": "application/json"
-            }
+            headers = {"Authorization": "sk-09gCbknxK8tOwRN8mC-NcRpqtdZjnhls57LSiSJh8TwJvUWqL3DLxnI1gpf9TCM5YZarbnpZ_r9P9Vy2dJrjLg"}
 
-            response = requests.request("POST", url, json=payload, headers=headers)
+            response = requests.request("GET", url, headers=headers)
 
             print(response.text)
             */
