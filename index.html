@@ -513,7 +513,11 @@
             selectedFiles = [];
             updateSendBtnState();
             
-            appendMessage('Думаю...', 'bot');
+            // Показываем индикатор "Думаю..." только если его нет
+            const lastBotMsg = chatMessages.querySelector('.message.bot:last-child');
+            if (!lastBotMsg || lastBotMsg.innerText !== 'Думаю...') {
+                appendMessage('Думаю...', 'bot');
+            }
             
             try {
                 // На самом деле мы не можем отправить файлы на сервер API в текущей реализации,
