@@ -11,7 +11,7 @@ load_dotenv()
 # Создаём FastAPI-приложение
 app = FastAPI()
 
-# Настройка CORS (для общения с frontend)
+# Настройка CORS (для общения с frontend.)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Или ['http://localhost:3000'] или твой домен
